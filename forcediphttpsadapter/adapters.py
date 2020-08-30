@@ -116,12 +116,14 @@ class ForcedIPHTTPSPoolManager(PoolManager):
             kwargs = self.connection_pool_kw
             assert scheme == 'https'
             kwargs['dest_ip'] = self.dest_ip
-            return ForcedIPHTTPSConnectionPool(host, port, **kwargs)
+            #return ForcedIPHTTPSConnectionPool(host, port, **kwargs)
+            return ForcedIPHTTPSConnectionPool(host, port, destip=self.dest_ip, **kwargs)
 
 
 class ForcedIPHTTPSConnectionPool(HTTPSConnectionPool):
     def __init__(self, *args, **kwargs):
-        self.dest_ip = kwargs.pop('dest_ip', None)
+        #self.dest_ip = kwargs.pop('dest_ip', None)
+        self.dest_ip = kwargs.pop('destip', None)
         super(ForcedIPHTTPSConnectionPool, self).__init__(*args, **kwargs)
 
     def _new_conn(self):
